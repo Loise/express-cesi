@@ -4,6 +4,9 @@ var app = express.Router();
 
 const Student = require('../models/student');
 
+var mongoose = require('mongoose');
+const ObjectID = mongoose.Types.ObjectId;
+
 app.get('/average', async (req, res, next) => {
 	let students = await Student.find({});
 	const average = students.map((s) => s.age).reduce((a, b) => (a + b)) / students.length;
