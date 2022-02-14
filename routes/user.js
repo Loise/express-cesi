@@ -46,7 +46,7 @@ app.post('/login', async (req, res) => {
 
     if (user) {
         // On génère le token
-        const accessToken = jwt.sign({ email: user.email }, process.env.TOKEN_SECRET);
+        const accessToken = jwt.sign({ email: user.email, role: user.role }, process.env.TOKEN_SECRET);
 
         res.json({
             accessToken
@@ -56,11 +56,24 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/profile/:id', authenticateJWT, async (req, res) => {
+	const { role } = req.user;
+	const id = req.params.id;
 
-app.get('/profile', authenticateJWT, async (req, res) => {
-	const user =  await User.findOne({email: req.user.email});
+	if (role !== 'admin') {
+        return res.sendStatus(403);
+    }
+    
+	const user = await User.findOne({_id: ObjectID(id)});
     res.json(user);
 });
+
+app.get('/profile', authenticateJWT, async (req, res) => {
+	const user = await User.findOne({email: req.user.email});
+    res.json(user);
+});
+
+
 
 
 module.exports = app;
