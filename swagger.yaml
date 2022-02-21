@@ -66,7 +66,59 @@ paths:
           description: "Success"
         "405":
           description: "Invalid input"
+  /user/login:
+    post:
+      tags:
+      - "user"
+      summary: "Se connecter"
+      description: ""
+      operationId: "loginUser"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Les identifiants de connexion"
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        "200":
+          description: "Success"
+  /user/profile:
+    get:
+      tags:
+      - "user"
+      summary: "Le profil de l'utilisateur connecté"
+      responses:
+        "200":
+          description: "Success"
+      parameters: [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "JWT access token",
+          "required": true,
+          "type": "string"
+        }
+      ]
 definitions:
+  Login:
+    type: "object"
+    required:
+    - "name"
+    - "age"
+    properties:
+      email:
+        type: "string"
+        example: "harry.potter@gmail.com"
+      password:
+        type: "string"
+        example: "1234"
   Student:
     type: "object"
     required:
@@ -79,6 +131,27 @@ definitions:
       age:
         type: "integer"
         example: 22
+  User:
+    type: "object"
+    required:
+    - "name"
+    - "age"
+    properties:
+      name:
+        type: "string"
+        example: "harry potter"
+      address:
+        type: "string"
+        example: "4 priver drive"
+      email:
+        type: "string"
+        example: "harry.potter@gmail.com"
+      password:
+        type: "string"
+        example: "pwd123"
+      role:
+        type: "string"
+        example: "user"
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
