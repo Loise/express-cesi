@@ -20,6 +20,20 @@ tags:
     description: "Find out more"
     url: "http://swagger.io"
 paths:
+  /student/{id}:
+    delete:
+      tags:
+      - "student"
+      summary: "Liste des étudiants"
+      parameters:
+        - name: id
+          type: string
+          required: true
+          in: path
+          description: "User ID"
+      responses:
+        "200":
+          description: "Success"
   /student:
     get:
       tags:
