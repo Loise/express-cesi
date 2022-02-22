@@ -32,14 +32,7 @@ const authenticateJWT = (req, res, next) => {
     }
 };
 
-const adminPermission = (req, res, next) => {
-    const { role } = req.user;
 
-	if (role !== 'admin') {
-        return res.sendStatus(403);
-    }
-    next();
-}
 
 app.post('/signin', async (req, res, next) => {
 	let userCreated = await User.create(req.body)
@@ -65,9 +58,17 @@ app.post('/login', async (req, res) => {
     }
 });
 
+const adminPermission = (req, res, next) => {
+    const { role } = req.user;
+
+	if (role !== 'admin') {
+        return res.sendStatus(403);
+    }
+    next();
+}
+
 app.get('/profile/:id', [authenticateJWT, adminPermission], async (req, res) => {
 	const id = req.params.id;
-    
 	const user = await User.findOne({_id: ObjectID(id)});
     res.json(user);
 });
