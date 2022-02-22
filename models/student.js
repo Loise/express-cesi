@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 var studentSchema = mongoose.Schema({
 	name: String,
-	age: Number
+	age: Number,
+	color: String
 }, {
 	collection: 'Students'
 })

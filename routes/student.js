@@ -7,6 +7,9 @@ const Student = require('../models/student');
 var mongoose = require('mongoose');
 const ObjectID = mongoose.Types.ObjectId;
 
+
+var authenticateJWT = require('../tools/auth.js')
+
 app.get('/average', async (req, res, next) => {
 	let students = await Student.find({});
 	const average = students.map((s) => s.age).reduce((a, b) => (a + b)) / students.length;
@@ -25,7 +28,7 @@ app.post('/', async (req, res, next) => {
 	res.send(studentCreated)
 })
 
-app.delete('/:id', async (req, res, next) => {
+app.delete('/:id', authenticateJWT, async (req, res, next) => {
 	let studentDeleted = await Student.deleteOne({_id: ObjectID(req.params.id)})
 	res.send(studentDeleted)
 })
@@ -34,8 +37,6 @@ app.get('/', async (req, res, next) => {
 	let students = await Student.find({});
 	res.json(students);
 });
-
-
 
 app.put('/:id', async (req, res, next) => {
 	let studentUpdated = await Student.updateOne({_id: ObjectID(req.params.id)}, {...req.body})
