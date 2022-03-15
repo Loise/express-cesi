@@ -7,6 +7,18 @@ var routeStudent = require('./routes/student')
 var routeUser = require('./routes/user')
 var cors = require('cors')
 
+const http = require('http');
+const socketIo = require("socket.io");
+
+
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
+});
+
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
@@ -30,13 +42,6 @@ var requestTime = function (req, res, next) {
 
 app.use(requestTime);
 
-var myLogger = function (req, res, next) {
-  console.log('LOGGED');
-  next();
-};
-
-//app.use(myLogger);
-
 app.get('/', (req, res) => {
   res.send(`Hello World! ---- request time ${req.requestTime}`)
 });
@@ -44,7 +49,27 @@ app.get('/', (req, res) => {
 app.use('/student/',routeStudent);
 app.use('/user/',routeUser);
 
+let interval;
 
-app.listen(port, () => {
+const getApiAndEmit = socket => {
+  const response = new Date();
+  // Emitting a new message. Will be consumed by the client
+  socket.emit("FromAPI", response);
+};
+
+io.on("connection", (socket) => {
+  console.log("New client connected");
+  if (interval) {
+    clearInterval(interval);
+  }
+  interval = setInterval(() => getApiAndEmit(socket), 1000);
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+    clearInterval(interval);
+  });
+});
+
+
+server.listen(port, () => {
   console.log(`Application exemple à l'écoute sur le port ${port}!`)
 });
