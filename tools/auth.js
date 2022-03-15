@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const authenticateJWT = (req, res, next) => {
 	//on récupère le Bearer token
     const authHeader = req.headers.authorization;

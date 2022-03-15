@@ -31,7 +31,7 @@ app.post('/login', async (req, res) => {
             accessToken
         });
     } else {
-        res.send('Email or password incorrect');
+        res.status(403).send('Wrong email or password');
     }
 });
 
