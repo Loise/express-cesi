@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
 app.use('/student/',routeStudent);
 app.use('/user/',routeUser);
 
-let interval;
+
 
 const getApiAndEmit = socket => {
   const response = new Date();
@@ -57,16 +57,25 @@ const getApiAndEmit = socket => {
   socket.emit("FromAPI", response);
 };
 
+let interval;
+
 io.on("connection", (socket) => {
   console.log("New client connected");
   if (interval) {
     clearInterval(interval);
   }
   interval = setInterval(() => getApiAndEmit(socket), 1000);
+
+  socket.on('chat message', (msg) => {
+    console.log('message: ' + msg);
+    io.emit('new message', msg);
+  });
+
   socket.on("disconnect", () => {
     console.log("Client disconnected");
     clearInterval(interval);
   });
+  
 });
 
 
