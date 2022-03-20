@@ -42,6 +42,8 @@ var requestTime = function (req, res, next) {
 
 app.use(requestTime);
 
+app.set('socketio', io);
+
 app.get('/', (req, res) => {
   res.send(`Hello World! ---- request time ${req.requestTime}`)
 });

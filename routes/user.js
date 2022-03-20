@@ -26,7 +26,8 @@ app.post('/login', async (req, res) => {
     if (user) {
         // On génère le token
         const accessToken = jwt.sign({ email: user.email, role: user.role }, process.env.TOKEN_SECRET);
-
+        var io = req.app.get('socketio');
+        io.emit('new login', `new user connected : ${user.name}`);
         res.json({
             accessToken
         });
