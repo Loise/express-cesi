@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 const dotenv = require('dotenv');
 var routeStudent = require('./routes/student')
 var routeUser = require('./routes/user')
+var routeMessage = require('./routes/message')
 var cors = require('cors')
 
 const http = require('http');
@@ -50,6 +51,7 @@ app.get('/', (req, res) => {
 
 app.use('/student/',routeStudent);
 app.use('/user/',routeUser);
+app.use('/message/',routeMessage);
 
 
 
