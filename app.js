@@ -69,6 +69,14 @@ io.on("connection", (socket) => {
   interval = setInterval(() => getApiAndEmit(socket), 1000);
 
   socket.on('chat message', (msg) => {
+    socket.on("joinRoom", ({ username, roomname }) => {
+      console.log(username);
+      console.log(roomname);
+      socket.join(roomname);
+      socket.emit(roomname, `Welcome ${username}`);
+      socket.broadcast.to(roomname).emit(roomname, `${username} has joined the chat`);
+    });
+
     console.log('message: ' + msg);
     io.emit('new message', msg);
   });
